@@ -45,6 +45,7 @@ body{
 
 
 .solve-div{
+    display: none;
     margin: 5% 0 ;    
 }
 
