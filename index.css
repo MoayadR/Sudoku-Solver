@@ -1,0 +1,63 @@
+body{
+    min-height: 97vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-choice-div{
+    display: flex;
+    width: 30%;
+    justify-content: space-evenly;
+}
+
+.game-choice-btn{
+    width: 120px;
+    height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: #2196F3;
+    background-color: white;
+}
+
+.game-choice-btn:hover{
+    background-color: #2196F3;
+    border-color: dodgerblue;
+}
+
+
+.game-grid-div{
+    width: 30%;
+    display: grid;
+    grid-template-columns: repeat(9 , 50px);
+}
+
+.game-cell{
+    border: 1px black solid;
+    height: 50px;
+    background-color: white;
+}
+
+.game-cell:hover{
+    background-color: antiquewhite;
+}
+
+
+.solve-div{
+    margin: 5% 0 ;    
+}
+
+.solve-btn{
+    width: 120px;
+    height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: #2196F3;
+    background-color: white;
+}
+
+.solve-btn:hover{
+    background-color: #2196F3;
+    border-color: dodgerblue;
+}
