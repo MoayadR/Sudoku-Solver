@@ -70,8 +70,73 @@ validateDelInput = (value) => {
     return false;
 }
 
+horizontalCheck = (value , row) => {
+    let counter = 0;
+    for(let column = 0 ; column <9 ; column++)
+    {
+        if (gameGrid[row][column].innerText === value)
+        {
+            counter += 1;
+        }
+    }
+    return counter > 1 ? false : true;
+};
+
+verticalCheck = (value , column) => {
+    let counter = 0;
+    for(let row = 0 ; row <9 ; row++)
+    {
+        if (gameGrid[row][column].innerText === value)
+        {
+            counter += 1;
+        }
+    }
+    return counter > 1 ? false : true;
+}
+
+boxCheck = (value , row , column) => {
+    let blockRowStart = Math.floor((row /3)) * 3;
+    let blockColumnStart = Math.floor((column /3))  * 3;
+    let counter = 0;
+    for (let i = blockRowStart; i < blockRowStart + 3; i++)
+    {
+        for (let j = blockColumnStart; j < blockColumnStart + 3; j++)
+        {
+            if (gameGrid[i][j].innerText === value)
+            {
+                counter += 1;
+            }
+        }
+    }
+    return counter > 1 ? false : true;
+}
+
+checkGameGridBeforStart = () => {
+    for (let row = 0; row < 9; row++) {
+        for (let column = 0; column < 9; column++) {
+            let value = gameGrid[row][column].innerText ;
+            if(value !== '')
+            {
+                if(horizontalCheck(value , row ) && verticalCheck(value, column) && boxCheck(value , row , column))
+                {
+                    continue;
+                }
+                return false;
+            }
+        }
+    }   
+    return true; 
+}
+
 solvingAlgorithm = ()=>{
-    console.log("Solving Now");
+    if(!checkGameGridBeforStart())
+    {
+        alert("Wrong Game Table input");
+        return;
+    }
+
+    // solving algo logic
+
 }
 
 
