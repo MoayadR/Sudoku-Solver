@@ -1,5 +1,6 @@
 const body = document.getElementsByTagName('body')[0];
 const choiceBtns = document.querySelectorAll('.game-choice-btn');
+const validChars = ['1' , '2' , '3' , '4' , '5' , '6' , '7' , '8' , '9'] ;
 let gameGridDiv = document.querySelector('.game-grid-div');
 let gameGrid = [[] , [] , [] , [] , [] , [] , [] , [] , []];
 let solvingAlgoType = 0;
@@ -13,10 +14,6 @@ clearBody = (btn)=>{
     createGridBoxes();
     createSolveDiv();
 };
-
-choiceBtns.forEach(element => {
-    element.addEventListener('click' , clearBody.bind(null , element));
-});
 
 createGameGridDiv = () => {
     gameGridDiv = document.createElement('div');
@@ -45,6 +42,8 @@ createSolveDiv = () => {
     solveBtn.className = 'solve-btn';
     solveBtn.innerText = 'Solve'
 
+    solveBtn.addEventListener('click' , solvingAlgorithm );
+
     div.appendChild(solveBtn);
     body.appendChild(div);
 };
@@ -56,3 +55,49 @@ changeCurrentBtn = (btn) => {
     currentBtn = btn;
     currentBtn.style.background = 'beige';
 };
+
+validateCharInput = (value) => {
+    if (validChars.includes(value)){
+        return true;
+    }
+    return false;
+}
+
+validateDelInput = (value) => {
+    if (value === 'Backspace' || value === 'Delete'){
+        return true;
+    }
+    return false;
+}
+
+solvingAlgorithm = ()=>{
+    console.log("Solving Now");
+}
+
+
+main = () => {
+    choiceBtns.forEach(element => {
+        element.addEventListener('click' , clearBody.bind(null , element));
+    });    
+
+    body.addEventListener('keydown' , (ev) => {
+        if (validateCharInput(ev.key))
+        {
+            if (currentBtn != null)
+            {
+                currentBtn.innerText = ev.key;
+            }
+        }
+        else if(validateDelInput(ev.key))
+        {
+            if (currentBtn != null)
+            {
+                currentBtn.innerText = '';
+            }
+        }
+    });
+
+
+}
+
+main();
