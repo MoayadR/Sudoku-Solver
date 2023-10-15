@@ -106,24 +106,65 @@ boxCheck = (value , row , column) => {
         }
     }
     return true;
+};
+
+getHorizontalCount = (value , row) => { 
+    let count = 0;
+    for(let column = 0 ; column <9 ; column++)
+    {
+        if (gameGrid[row][column].innerText == value)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 
-// checkGameGridBeforStart = () => {
-//     for (let row = 0; row < 9; row++) {
-//         for (let column = 0; column < 9; column++) {
-//             let value = gameGrid[row][column].innerText ;
-//             if(value !== '')
-//             {
-//                 if(!horizontalCheck(value , row ) && !verticalCheck(value, column) && !boxCheck(value , row , column))
-//                 {
-//                     continue;
-//                 }
-//                 return false;
-//             }
-//         }
-//     }   
-//     return true; 
-// }
+getVerticalCount = (value,column)=>{
+    let count = 0;
+    for(let row = 0 ; row <9 ; row++)
+    {
+        if (gameGrid[row][column].innerText == value)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+getBoxCount = (value , row , column) => {
+    let blockRowStart = Math.floor((row /3)) * 3;
+    let blockColumnStart = Math.floor((column /3))  * 3;
+    let count = 0;
+    for (let i = blockRowStart; i < blockRowStart + 3; i++)
+    {
+        for (let j = blockColumnStart; j < blockColumnStart + 3; j++)
+        {
+            if (gameGrid[i][j].innerText == value)
+            {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+checkGameGridBeforStart = () => {
+    for (let row = 0; row < 9; row++) {
+        for (let column = 0; column < 9; column++) {
+            let value = gameGrid[row][column].innerText ;
+            if(value !== '')
+            {
+                if(getHorizontalCount(value , row) == 1 && getVerticalCount(value , column) == 1 && getBoxCount(value , row,column) == 1 )
+                {
+                    continue;
+                }
+                return false;
+            }
+        }
+    }   
+    return true; 
+}
 
 
 function isSafe(row, col, num)
@@ -176,11 +217,11 @@ function solveSudoku(row, col)
 }
 
 solvingAlgorithm = ()=>{
-    // if(!checkGameGridBeforStart())
-    // {
-    //     alert("Wrong Game Table input");
-    //     return;
-    // }
+    if(!checkGameGridBeforStart())
+    {
+        alert("Wrong Game Table input");
+        return;
+    }
 
     solveSudoku(0 , 0);
 }
