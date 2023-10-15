@@ -71,72 +71,118 @@ validateDelInput = (value) => {
 }
 
 horizontalCheck = (value , row) => {
-    let counter = 0;
     for(let column = 0 ; column <9 ; column++)
     {
-        if (gameGrid[row][column].innerText === value)
+        if (gameGrid[row][column].innerText == value)
         {
-            counter += 1;
+            return false;
         }
     }
-    return counter > 1 ? false : true;
+    return true;
 };
 
 verticalCheck = (value , column) => {
-    let counter = 0;
     for(let row = 0 ; row <9 ; row++)
     {
-        if (gameGrid[row][column].innerText === value)
+        if (gameGrid[row][column].innerText == value)
         {
-            counter += 1;
+            return false;
         }
     }
-    return counter > 1 ? false : true;
+    return true;
 }
 
 boxCheck = (value , row , column) => {
     let blockRowStart = Math.floor((row /3)) * 3;
     let blockColumnStart = Math.floor((column /3))  * 3;
-    let counter = 0;
     for (let i = blockRowStart; i < blockRowStart + 3; i++)
     {
         for (let j = blockColumnStart; j < blockColumnStart + 3; j++)
         {
-            if (gameGrid[i][j].innerText === value)
+            if (gameGrid[i][j].innerText == value)
             {
-                counter += 1;
-            }
-        }
-    }
-    return counter > 1 ? false : true;
-}
-
-checkGameGridBeforStart = () => {
-    for (let row = 0; row < 9; row++) {
-        for (let column = 0; column < 9; column++) {
-            let value = gameGrid[row][column].innerText ;
-            if(value !== '')
-            {
-                if(horizontalCheck(value , row ) && verticalCheck(value, column) && boxCheck(value , row , column))
-                {
-                    continue;
-                }
                 return false;
             }
         }
-    }   
-    return true; 
+    }
+    return true;
+}
+
+// checkGameGridBeforStart = () => {
+//     for (let row = 0; row < 9; row++) {
+//         for (let column = 0; column < 9; column++) {
+//             let value = gameGrid[row][column].innerText ;
+//             if(value !== '')
+//             {
+//                 if(!horizontalCheck(value , row ) && !verticalCheck(value, column) && !boxCheck(value , row , column))
+//                 {
+//                     continue;
+//                 }
+//                 return false;
+//             }
+//         }
+//     }   
+//     return true; 
+// }
+
+
+function isSafe(row, col, num)
+{
+    if(!horizontalCheck(num , row))
+    {
+        return false;
+    }
+
+    if(!verticalCheck(num , col)){
+        return false;
+    }
+
+    if(!boxCheck(num , row , col))
+    {
+        return false;
+    
+    }
+    return true;
+}
+
+
+function solveSudoku(row, col)
+{
+     
+    if (row == 8 && col == 9)
+        return true;
+
+    if (col == 9)
+    {
+        row++;
+        col = 0;
+    }
+    if (gameGrid[row][col].innerText != '')
+        return solveSudoku(row, col + 1);
+ 
+    for(let guess = 1; guess <= 9; guess++)
+    {
+
+        if (isSafe( row, col, guess))
+        {
+            gameGrid[row][col].innerText = guess;
+            if (solveSudoku( row, col + 1))
+                return true;
+        }
+         
+        gameGrid[row][col].innerText = '';
+    }
+    return false;
 }
 
 solvingAlgorithm = ()=>{
-    if(!checkGameGridBeforStart())
-    {
-        alert("Wrong Game Table input");
-        return;
-    }
+    // if(!checkGameGridBeforStart())
+    // {
+    //     alert("Wrong Game Table input");
+    //     return;
+    // }
 
-    // solving algo logic
-
+    solveSudoku(0 , 0);
 }
 
 
