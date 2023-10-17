@@ -6,10 +6,18 @@ let gameGrid = [[] , [] , [] , [] , [] , [] , [] , [] , []];
 let solvingAlgoType = 0;
 let solveBtn = null;
 let currentBtn = null;
+let currentRow = null;
+let currentColumn = null;
+
+
 
 clearBody = (btn)=>{
     body.innerHTML = '';
     solvingAlgoType = btn.dataset.id;
+
+    if (solvingAlgoType == 1)
+        {xCheck = null;}
+
     createGameGridDiv();
     createGridBoxes();
     createSolveDiv();
@@ -26,7 +34,7 @@ createGridBoxes = () => {
         for (let column = 0; column < 9; column++) {
             btn = document.createElement('button');
             btn.className = 'game-cell';
-            btn.addEventListener('click' , changeCurrentBtn.bind(null , btn) )
+            btn.addEventListener('click' , changeCurrentVariables.bind(null , btn , row , column) )
             gameGridDiv.append(btn);
             gameGrid[row][column] = btn;
         }
@@ -48,11 +56,55 @@ createSolveDiv = () => {
     body.appendChild(div);
 };
 
-changeCurrentBtn = (btn) => {
-    if (currentBtn !== null){
-        currentBtn.style.background = 'white';
+setCurrentRowColor = (color) => {
+    if (currentRow != null)
+    {
+        for(let i = 0 ; i<9 ; i++)
+        {
+            gameGrid[currentRow][i].style.background = color;
+        }
     }
+    
+};
+
+setCurrentColumnColor = (color) => {
+    if (currentColumn != null)
+    {
+        for(let i = 0 ; i<9 ; i++)
+        {
+            gameGrid[i][currentColumn].style.background = color;
+        }
+    }
+};
+
+setCurrentBlockColor = (color) => {
+    if (currentColumn != null && currentRow != null)
+    {
+        let blockRowStart = Math.floor((currentRow /3)) * 3;
+        let blockColumnStart = Math.floor((currentColumn /3))  * 3;
+        for (let i = blockRowStart; i < blockRowStart + 3; i++)
+        {
+            for (let j = blockColumnStart; j < blockColumnStart + 3; j++)
+            {
+                gameGrid[i][j].style.background = color;
+            }
+        }
+    }
+};
+
+changeCurrentVariables = (btn , row , column) => {
+    setCurrentColumnColor('white');
+    setCurrentRowColor('white');
+    setCurrentBlockColor('white');
+
     currentBtn = btn;
+    currentRow = row;
+    currentColumn = column;
+
+    setCurrentColumnColor('grey');
+    setCurrentRowColor('grey');
+    setCurrentBlockColor('grey');
+
     currentBtn.style.background = 'beige';
 };
 
@@ -108,6 +160,10 @@ boxCheck = (value , row , column) => {
     return true;
 };
 
+xCheck = (value , row , column) => {
+    // implementation to be added 
+};
+
 getHorizontalCount = (value , row) => { 
     let count = 0;
     for(let column = 0 ; column <9 ; column++)
@@ -155,11 +211,10 @@ checkGameGridBeforStart = () => {
             let value = gameGrid[row][column].innerText ;
             if(value !== '')
             {
-                if(getHorizontalCount(value , row) == 1 && getVerticalCount(value , column) == 1 && getBoxCount(value , row,column) == 1 )
+                if(getHorizontalCount(value , row) != 1 && getVerticalCount(value , column) != 1 && getBoxCount(value , row,column) != 1 )
                 {
-                    continue;
+                    return false;
                 }
-                return false;
             }
         }
     }   
@@ -181,7 +236,13 @@ function isSafe(row, col, num)
     if(!boxCheck(num , row , col))
     {
         return false;
-    
+    }
+
+    if (xCheck != null){
+        if(!xCheck(num , row , col))
+        {
+            return false;
+        }
     }
     return true;
 }
