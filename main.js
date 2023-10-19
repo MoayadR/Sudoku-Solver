@@ -310,6 +310,83 @@ function isSafe(row, col, num)
 }
 
 
+function initializeGuessTable(guessTable){
+    for(let i =0 ; i<9 ; i++)
+    {
+        for(let j =0 ; j<9 ; j++)
+        {
+            if(gameGrid[i][j].innerText == '')
+            {
+                guessTable[i][j] = 1;
+                continue;
+            }
+            guessTable[i][j] = -1;
+        }
+    }
+}
+
+function solveSudokuIterative(){
+    let guessTable = [[0,0,0,0,0,0,0,0,0] , [0,0,0,0,0,0,0,0,0] , [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0] , [0,0,0,0,0,0,0,0,0] , [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0] , [0,0,0,0,0,0,0,0,0] , [0,0,0,0,0,0,0,0,0]];
+    let r = 0;
+    let c = 0;
+    let back = false;
+
+    initializeGuessTable(guessTable);
+
+    while(r<9 && c < 9)
+    {
+        if(gameGrid[r][c].innerText == '' || guessTable[r][c] != -1 ) // empty or backtracked value
+        {
+            let value = guessTable[r][c];
+            back = false;
+            while(value < 10)
+            {
+                if(isSafe( r , c , value))
+                {
+                    guessTable[r][c] = value + 1;
+                    gameGrid[r][c].innerText = value;
+                    break;
+                }
+
+                value += 1;
+            }
+
+            if(value >= 10)
+            {
+                guessTable[r][c] = 1;
+                gameGrid[r][c].innerText = '';
+                // back
+                back = true;
+            }
+        }
+
+        if (back)
+        {
+            if(guessTable[r][c] != -1)
+            {
+                gameGrid[r][c].innerText = '';
+            }
+            c-=1;
+            if(c<0)
+            {
+                r-=1;
+                c=8;
+            }
+            continue;
+        }
+
+        c += 1;
+
+        if (c == 9)
+        {
+            r+=1;
+            c = 0;
+        }
+
+
+    }
+};
+
 function solveSudoku(row, col)
 {
      
@@ -346,7 +423,8 @@ solvingAlgorithm = ()=>{
         return;
     }
 
-    solveSudoku(0 , 0);
+    // solveSudoku(0 , 0);
+    solveSudokuIterative();
 }
 
 
