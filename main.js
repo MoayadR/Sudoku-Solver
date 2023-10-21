@@ -15,6 +15,77 @@ clearBody = (btn)=>{
     body.innerHTML = '';
     solvingAlgoType = btn.dataset.id;
 
+    if (solvingAlgoType == 1)
+    {
+        setXColor = () =>{
+            return true;
+        }
+
+        xCheck = () => {
+            return true;
+        }
+    }
+    else
+    {
+        setXColor = (color) =>{
+            let r = 0 , c=0;
+            while(r<9 && c <9)
+            {
+                gameGrid[r][c].style.background = color;
+                r+=1;
+                c+=1;
+            }
+        
+            r = 8 , c = 0;
+            while(r>0 && c<9)
+            {
+                gameGrid[r][c].style.background = color;
+                r-=1;
+                c+=1;
+            }
+        
+        };
+
+        xCheck = () => {
+            let map = [null , false,false,false,false,false,false,false,false,false]
+            let r = 0 , c=0;
+        
+            while(r<9 && c <9)
+            {
+                if(gameGrid[r][c].innerText != '')
+                {
+                    if (map[gameGrid[r][c].innerText])
+                    {
+                        return false;
+                    }
+                    map[gameGrid[r][c].innerText] = true;   
+                }
+                r+=1;
+                c+=1;
+            }
+        
+            map = [null ,false,false,false,false,false,false,false,false,false];
+        
+            r = 8 , c = 0;
+            while(r>=0 && c<9)
+            {
+                if(gameGrid[r][c].innerText != '')
+                {
+                    if (map[gameGrid[r][c].innerText])
+                    {
+                        return false;
+                    }
+                    map[gameGrid[r][c].innerText] = true;
+                }
+                r-=1;
+                c+=1;
+            }
+        
+            return true;  
+        };
+
+    }
+
     createGameGridDiv();
     createGridBoxes();
     createSolveDiv();
@@ -89,25 +160,6 @@ setCurrentBlockColor = (color) => {
     }
 };
 
-setXColor = (color) =>{
-    let r = 0 , c=0;
-    while(r<9 && c <9)
-    {
-        gameGrid[r][c].style.background = color;
-        r+=1;
-        c+=1;
-    }
-
-    r = 8 , c = 0;
-    while(r>0 && c<9)
-    {
-        gameGrid[r][c].style.background = color;
-        r-=1;
-        c+=1;
-    }
-
-};
-
 changeCurrentVariables = (btn , row , column) => {
     setCurrentColumnColor('white');
     setCurrentRowColor('white');
@@ -117,10 +169,8 @@ changeCurrentVariables = (btn , row , column) => {
     currentRow = row;
     currentColumn = column;
 
-    if(solvingAlgoType == 2)
-    {
-        setXColor('#E2DFD2');
-    }
+
+    setXColor('#E2DFD2');
     setCurrentColumnColor('#F3E5AB');
     setCurrentRowColor('#F3E5AB');
     setCurrentBlockColor('#F3E5AB');
@@ -180,44 +230,6 @@ boxCheck = (value , row , column) => {
     return true;
 };
 
-xCheck = () => {
-    let map = [null , false,false,false,false,false,false,false,false,false]
-    let r = 0 , c=0;
-
-    while(r<9 && c <9)
-    {
-        if(gameGrid[r][c].innerText != '')
-        {
-            if (map[gameGrid[r][c].innerText])
-            {
-                return false;
-            }
-            map[gameGrid[r][c].innerText] = true;   
-        }
-        r+=1;
-        c+=1;
-    }
-
-    map = [null ,false,false,false,false,false,false,false,false,false];
-
-    r = 8 , c = 0;
-    while(r>0 && c<9)
-    {
-        if(gameGrid[r][c].innerText != '')
-        {
-            if (map[gameGrid[r][c].innerText])
-            {
-                return false;
-            }
-            map[gameGrid[r][c].innerText] = true;
-        }
-        r-=1;
-        c+=1;
-    }
-
-    return true;  
-};
-
 getHorizontalCount = (value , row) => { 
     let count = 0;
     for(let column = 0 ; column <9 ; column++)
@@ -270,13 +282,11 @@ checkGameGridBeforStart = () => {
                     return false;
                 }
 
-                if(solvingAlgoType == 2)
+                if(!xCheck())
                 {
-                    if(!xCheck())
-                    {
-                        return false;
-                    }
+                    return false;
                 }
+                
             }
         }
     }   
@@ -300,12 +310,11 @@ function isSafe(row, col, num)
         return false;
     }
 
-    if (solvingAlgoType == 2){
-        if(!xCheck())
-        {
-            return false;
-        }
+    if(!xCheck())
+    {
+        return false;
     }
+
     return true;
 }
 
