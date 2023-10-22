@@ -10,80 +10,22 @@ let currentRow = null;
 let currentColumn = null;
 
 
+setXColor = () =>{
+    return true;
+}
+
+xCheck = () => {
+    return true;
+}
+
 
 clearBody = (btn)=>{
     body.innerHTML = '';
     solvingAlgoType = btn.dataset.id;
 
-    if (solvingAlgoType == 1)
+    if (solvingAlgoType == 2)
     {
-        setXColor = () =>{
-            return true;
-        }
-
-        xCheck = () => {
-            return true;
-        }
-    }
-    else
-    {
-        setXColor = (color) =>{
-            let r = 0 , c=0;
-            while(r<9 && c <9)
-            {
-                gameGrid[r][c].style.background = color;
-                r+=1;
-                c+=1;
-            }
-        
-            r = 8 , c = 0;
-            while(r>0 && c<9)
-            {
-                gameGrid[r][c].style.background = color;
-                r-=1;
-                c+=1;
-            }
-        
-        };
-
-        xCheck = () => {
-            let map = [null , false,false,false,false,false,false,false,false,false]
-            let r = 0 , c=0;
-        
-            while(r<9 && c <9)
-            {
-                if(gameGrid[r][c].innerText != '')
-                {
-                    if (map[gameGrid[r][c].innerText])
-                    {
-                        return false;
-                    }
-                    map[gameGrid[r][c].innerText] = true;   
-                }
-                r+=1;
-                c+=1;
-            }
-        
-            map = [null ,false,false,false,false,false,false,false,false,false];
-        
-            r = 8 , c = 0;
-            while(r>=0 && c<9)
-            {
-                if(gameGrid[r][c].innerText != '')
-                {
-                    if (map[gameGrid[r][c].innerText])
-                    {
-                        return false;
-                    }
-                    map[gameGrid[r][c].innerText] = true;
-                }
-                r-=1;
-                c+=1;
-            }
-        
-            return true;  
-        };
-
+        defineXSudokuConstraints();
     }
 
     createGameGridDiv();
@@ -170,10 +112,10 @@ changeCurrentVariables = (btn , row , column) => {
     currentColumn = column;
 
 
-    setXColor('#E2DFD2');
     setCurrentColumnColor('#F3E5AB');
     setCurrentRowColor('#F3E5AB');
     setCurrentBlockColor('#F3E5AB');
+    setXColor('#E2DFD2');
 
     currentBtn.style.background = 'beige';
 };
@@ -270,6 +212,65 @@ getBoxCount = (value , row , column) => {
     }
     return count;
 }
+
+defineXSudokuConstraints = () => {
+    setXColor = (color) =>{
+        let r = 0 , c=0;
+        while(r<9 && c <9)
+        {
+            gameGrid[r][c].style.background = color;
+            r+=1;
+            c+=1;
+        }
+    
+        r = 8 , c = 0;
+        while(r>=0 && c<9)
+        {
+            gameGrid[r][c].style.background = color;
+            r-=1;
+            c+=1;
+        }
+    
+    };
+
+    xCheck = () => {
+        let map = [null , false,false,false,false,false,false,false,false,false]
+        let r = 0 , c=0;
+    
+        while(r<9 && c <9)
+        {
+            if(gameGrid[r][c].innerText != '')
+            {
+                if (map[gameGrid[r][c].innerText])
+                {
+                    return false;
+                }
+                map[gameGrid[r][c].innerText] = true;   
+            }
+            r+=1;
+            c+=1;
+        }
+    
+        map = [null ,false,false,false,false,false,false,false,false,false];
+    
+        r = 8 , c = 0;
+        while(r>=0 && c<9)
+        {
+            if(gameGrid[r][c].innerText != '')
+            {
+                if (map[gameGrid[r][c].innerText])
+                {
+                    return false;
+                }
+                map[gameGrid[r][c].innerText] = true;
+            }
+            r-=1;
+            c+=1;
+        }
+    
+        return true;  
+    };
+};
 
 checkGameGridBeforStart = () => {
     for (let row = 0; row < 9; row++) {
